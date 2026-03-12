@@ -4,424 +4,482 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZORO X CHEATS — Panel Gaming System</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+/* ══════════════════════════════════════
+   ROOT & RESET
+══════════════════════════════════════ */
 :root {
-  --green: #00ff9c;
-  --green2: #00ffcc;
-  --orange: #ff6a00;
-  --dark: #050505;
-  --card-bg: rgba(0,255,156,0.04);
-  --border: rgba(0,255,156,0.15);
+  --g:   #00ff9c;
+  --g2:  #00ffcc;
+  --o:   #ff6a00;
+  --bg:  #03050a;
+  --bg2: #070c14;
+  --card: rgba(0,255,156,0.03);
+  --bdr:  rgba(0,255,156,0.12);
+  --txt:  #d0d8e8;
+  --dim:  #5a6a7a;
 }
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--dark);
-  font-family: 'Rajdhani', sans-serif;
-  color: #fff;
-  overflow-x: hidden;
-  cursor: crosshair;
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  font-family:'Rajdhani',sans-serif;
+  color:var(--txt);
+  overflow-x:hidden;
+  cursor:crosshair;
 }
 
-/* ── LOADER ── */
-#loader {
-  position: fixed; inset: 0; z-index: 9999;
-  background: #000;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  transition: opacity 0.7s ease;
+/* ══ LOADER ══ */
+#loader{
+  position:fixed;inset:0;z-index:9999;
+  background:#000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .8s ease;
 }
-#loader.hide { opacity:0; pointer-events:none; }
-.loader-logo {
-  width: 80px; height: 80px;
-  animation: lspin 1.4s linear infinite;
-  filter: drop-shadow(0 0 24px var(--green));
+#loader.hide{opacity:0;pointer-events:none;}
+.ld-logo{
+  width:76px;height:76px;
+  animation:lspin 1.6s linear infinite;
+  filter:drop-shadow(0 0 20px var(--g));
 }
-@keyframes lspin {
-  0%   { transform: rotate(0deg) scale(1); }
-  50%  { transform: rotate(180deg) scale(1.08); }
-  100% { transform: rotate(360deg) scale(1); }
+@keyframes lspin{0%{transform:rotate(0)scale(1)}50%{transform:rotate(180deg)scale(1.07)}100%{transform:rotate(360deg)scale(1)}}
+.ld-name{
+  font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;
+  color:var(--g);letter-spacing:6px;margin:16px 0 2px;
+  text-shadow:0 0 16px var(--g);
 }
-.loader-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 20px; font-weight: 900;
-  color: var(--green); letter-spacing: 6px;
-  margin: 16px 0 3px;
-  text-shadow: 0 0 20px var(--green);
-}
-.loader-sub {
-  font-size: 10px; letter-spacing: 5px; color: #444;
-  font-family: 'Orbitron', sans-serif;
-  text-transform: uppercase; margin-bottom: 22px;
-}
-.loader-bar-wrap {
-  width: 250px; height: 2px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 99px; overflow: hidden;
-}
-.loader-bar {
-  height: 100%; width: 0%;
-  background: linear-gradient(90deg, var(--green), var(--orange));
-  animation: lfill 2.4s ease forwards;
-}
-@keyframes lfill { to { width:100%; } }
-.loader-pct {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 10px; color: var(--green);
-  letter-spacing: 3px; margin-top: 10px;
-  animation: blink 0.9s step-end infinite;
-}
-@keyframes blink { 50%{ opacity:0; } }
+.ld-sub{font-family:'Orbitron',sans-serif;font-size:9px;color:#333;letter-spacing:5px;margin-bottom:22px;}
+.ld-track{width:240px;height:2px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden;}
+.ld-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--g),var(--o));animation:lfill 2.5s ease forwards;}
+@keyframes lfill{to{width:100%}}
+.ld-pct{font-family:'Orbitron',sans-serif;font-size:9px;color:var(--g);letter-spacing:3px;margin-top:10px;animation:blink .9s step-end infinite;}
+@keyframes blink{50%{opacity:0}}
 
-/* ── CANVAS ── */
-#bgcanvas { position: fixed; inset:0; z-index:0; pointer-events: none; }
-.scanlines {
-  position: fixed; inset:0; z-index:1; pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom, transparent 0, transparent 3px,
-    rgba(0,0,0,0.07) 3px, rgba(0,0,0,0.07) 4px
+/* ══ MATRIX CANVAS (kept subtle — behind dark overlay) ══ */
+#bgcanvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.22;}
+
+/* Dark overlay so content stays fully readable */
+.bg-overlay{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,255,156,0.04) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(3,5,10,0.82) 0%, rgba(3,5,10,0.88) 100%);
+}
+
+/* Subtle scanlines */
+.scanlines{
+  position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(
+    to bottom,transparent 0,transparent 2px,
+    rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 3px
   );
 }
 
-/* ── NAVBAR ── */
-nav {
-  position: fixed; top:0; width:100%; z-index:1000;
-  display: flex; align-items:center; justify-content:space-between;
-  padding: 11px 48px;
-  background: rgba(0,0,0,0.9);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(14px);
+/* ══ NAVBAR ══ */
+nav{
+  position:fixed;top:0;width:100%;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:58px;
+  background:rgba(3,5,10,0.95);
+  border-bottom:1px solid var(--bdr);
+  backdrop-filter:blur(16px);
 }
-.nav-logo { display:flex; align-items:center; gap:10px; }
-.nav-logo img {
-  width: 34px; height: 34px; border-radius:50%;
-  filter: drop-shadow(0 0 7px var(--green));
+.nav-left{display:flex;align-items:center;gap:10px;}
+.nav-left img{width:32px;height:32px;border-radius:50%;filter:drop-shadow(0 0 6px var(--g));}
+.nav-brand{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--g);letter-spacing:2px;text-shadow:0 0 8px rgba(0,255,156,.4);}
+nav ul{display:flex;gap:24px;list-style:none;align-items:center;}
+nav ul li a{
+  font-family:'Orbitron',sans-serif;font-size:9px;color:var(--dim);
+  text-decoration:none;letter-spacing:2px;text-transform:uppercase;
+  padding-bottom:2px;border-bottom:1px solid transparent;
+  transition:all .25s;
 }
-.nav-brand {
+nav ul li a:hover{color:var(--g);border-bottom-color:rgba(0,255,156,.4);}
+.nav-dc{
+  padding:7px 16px;background:var(--g);color:#000!important;
+  font-weight:700;border-radius:3px;border-bottom:none!important;
+  transition:all .25s;
+}
+.nav-dc:hover{background:var(--g2)!important;box-shadow:0 0 16px rgba(0,255,156,.35);}
+
+/* ══ TICKER ══ */
+.ticker{
+  position:relative;z-index:3;
+  height:34px;background:var(--g);
+  overflow:hidden;display:flex;align-items:center;
+  margin-top:58px;
+}
+.ticker-inner{display:flex;width:max-content;animation:tick 40s linear infinite;}
+.ticker-item{
+  font-family:'Orbitron',sans-serif;font-size:10px;
+  color:#000;font-weight:700;letter-spacing:3px;
+  padding:0 32px;white-space:nowrap;
+}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ══ CONTENT WRAPPER ══ */
+.content{position:relative;z-index:3;}
+
+/* ══ HERO ══ */
+#hero{
+  min-height:calc(100vh - 92px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:50px 24px 60px;
+}
+.hero-banner{
+  width:100%;max-width:800px;
+  border-radius:8px;overflow:hidden;
+  margin-bottom:26px;
+  border:1px solid var(--bdr);
+  box-shadow:0 0 40px rgba(0,255,156,.1), 0 20px 60px rgba(0,0,0,.5);
+}
+.hero-banner img{width:100%;display:block;}
+.hero-logo{
+  width:60px;height:60px;margin-bottom:14px;
+  animation:float 3.5s ease-in-out infinite;
+  filter:drop-shadow(0 0 14px var(--g));
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+.hero-title{
   font-family:'Orbitron',sans-serif;
-  font-size:13px; color:var(--green);
-  text-shadow:0 0 8px var(--green); letter-spacing:2px;
+  font-size:clamp(28px,5vw,60px);
+  font-weight:900;color:#fff;
+  letter-spacing:5px;line-height:1.1;
+  text-shadow:0 0 30px rgba(0,255,156,.3);
+  animation:glitch 6s infinite;
 }
-nav ul { display:flex; gap:26px; list-style:none; }
-nav ul li a {
-  text-decoration:none; color:#666;
-  font-size:10px; letter-spacing:2px;
-  font-family:'Orbitron',sans-serif; text-transform:uppercase;
-  transition: all .3s;
-  padding-bottom: 2px; border-bottom: 1px solid transparent;
+.hero-title span{color:var(--g);}
+@keyframes glitch{
+  0%,85%,100%{text-shadow:0 0 30px rgba(0,255,156,.3);transform:none;}
+  86%{transform:translate(-2px,1px);text-shadow:-2px 0 #ff0066,2px 0 var(--g);}
+  87%{transform:translate(2px,-1px);text-shadow:2px 0 #ff0066,-2px 0 var(--g);}
+  88%{transform:none;}
+  89%{transform:translate(1px,1px);text-shadow:-1px 0 var(--o),1px 0 var(--g);}
+  90%{transform:none;}
 }
-nav ul li a:hover { color:var(--green); border-bottom-color: var(--green); }
-.nav-cta {
-  padding: 7px 16px; background: var(--green);
-  color:#000 !important; font-weight:700;
-  border-radius:3px; border-bottom:none !important;
-}
-.nav-cta:hover { background: var(--green2) !important; }
-
-/* ── TICKER ── */
-.ticker-wrap {
-  position: relative; z-index:2;
-  background: var(--green); overflow:hidden; padding:8px 0; margin-top:58px;
-}
-.ticker-inner { display:flex; width:max-content; animation: ticker 35s linear infinite; }
-.ticker-item {
-  font-family:'Orbitron',sans-serif; font-size:10px; color:#000;
-  font-weight:700; letter-spacing:3px; padding:0 34px; white-space:nowrap;
-}
-@keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-
-/* ── HERO ── */
-#hero {
-  position:relative; z-index:2; min-height:100vh;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  text-align:center; padding: 40px 20px 60px;
-}
-.hero-banner {
-  width:100%; max-width:820px; border-radius:6px; overflow:hidden;
-  margin-bottom:24px;
-  box-shadow: 0 0 50px rgba(0,255,156,0.15);
-  border:1px solid var(--border); animation: fsd 1s ease .3s both;
-}
-.hero-banner img { width:100%; display:block; }
-.hero-logo {
-  width: 64px; height: 64px;
-  animation: logoFloat 3s ease-in-out infinite;
-  filter: drop-shadow(0 0 16px var(--green)) drop-shadow(0 0 36px rgba(0,255,156,0.2));
-  margin-bottom: 14px;
-}
-@keyframes logoFloat {
-  0%,100%{ transform:translateY(0) rotate(0deg); }
-  50%    { transform:translateY(-8px) rotate(2deg); }
-}
-.hero-title {
+.hero-sub{
   font-family:'Orbitron',sans-serif;
-  font-size: clamp(30px, 5vw, 64px);
-  font-weight:900; color:var(--green);
-  text-shadow: 0 0 20px var(--green), 0 0 50px rgba(0,255,156,0.2);
-  animation: glitch 5s infinite, fsd .8s ease .6s both;
-  letter-spacing:4px;
+  font-size:11px;letter-spacing:7px;color:var(--dim);
+  text-transform:uppercase;margin:10px 0 6px;
 }
-@keyframes glitch {
-  0%,88%,100%{ text-shadow:0 0 20px var(--green),0 0 50px rgba(0,255,156,.2); transform:translate(0); }
-  89%{ transform:translate(-3px,1px); text-shadow:-2px 0 #ff0066,2px 0 var(--green); }
-  90%{ transform:translate(3px,-1px); text-shadow:2px 0 #ff0066,-2px 0 var(--green); }
-  91%{ transform:translate(0); }
-  92%{ transform:translate(2px,2px); text-shadow:-2px 0 var(--orange),2px 0 var(--green); }
-  93%{ transform:translate(0); }
+.hero-tag{
+  font-size:13px;color:var(--dim);letter-spacing:2px;
+  margin-bottom:28px;
 }
-.hero-sub { font-size:14px; letter-spacing:6px; color:#555; text-transform:uppercase; margin:7px 0 5px; animation: fsd .8s ease .9s both; }
-.hero-tagline { font-size:12px; color:#3a3a3a; letter-spacing:3px; margin-bottom:26px; animation: fsd .8s ease 1s both; }
-@keyframes fsd { from{opacity:0;transform:translateY(-22px)} to{opacity:1;transform:translateY(0)} }
-.hero-btns { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation: fsd .8s ease 1.1s both; margin-bottom:36px; }
-.hero-stats {
-  display:flex; gap:44px; justify-content:center; flex-wrap:wrap;
-  animation: fsd .8s ease 1.3s both;
-  padding: 22px 38px; border: 1px solid var(--border); border-radius: 6px;
-  background: rgba(0,255,156,0.025); backdrop-filter: blur(6px);
-}
-.stat-item { text-align:center; }
-.stat-num {
-  font-family:'Orbitron',sans-serif; font-size:26px; font-weight:900;
-  color:var(--green); text-shadow:0 0 10px var(--green); display:block;
-}
-.stat-label { font-size:10px; color:#444; letter-spacing:3px; text-transform:uppercase; }
+.hero-tag span{color:rgba(0,255,156,.5);}
 
-/* ── BUTTONS ── */
-.btn-primary {
-  padding:12px 30px; background:var(--green); color:#000;
-  font-weight:700; font-family:'Orbitron',sans-serif; font-size:11px; letter-spacing:2px;
-  border:none; border-radius:3px; cursor:pointer; text-decoration:none;
-  display:inline-flex; align-items:center; gap:7px;
-  transition:all .3s; position:relative; overflow:hidden;
+/* STAT BAR */
+.stat-bar{
+  display:flex;gap:0;margin:28px 0 0;
+  border:1px solid var(--bdr);border-radius:6px;
+  overflow:hidden;background:rgba(0,0,0,.4);
+  backdrop-filter:blur(8px);
 }
-.btn-primary::after {
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
-  transform:translateX(-100%); transition:transform .5s;
+.stat-item{
+  flex:1;padding:18px 10px;text-align:center;
+  border-right:1px solid var(--bdr);
 }
-.btn-primary:hover::after { transform:translateX(100%); }
-.btn-primary:hover { background:var(--green2); box-shadow:0 0 26px var(--green); transform:translateY(-2px); }
-.btn-outline {
-  padding:12px 30px; background:transparent; color:var(--green);
-  font-weight:700; font-family:'Orbitron',sans-serif; font-size:11px; letter-spacing:2px;
-  border:1px solid var(--green); border-radius:3px; cursor:pointer; text-decoration:none;
-  display:inline-flex; align-items:center; gap:7px; transition:all .3s;
-}
-.btn-outline:hover { background:var(--green); color:#000; box-shadow:0 0 26px var(--green); transform:translateY(-2px); }
-
-/* ── SECTION ── */
-section { position:relative; z-index:2; padding:88px 58px; }
-.section-header { text-align:center; margin-bottom:56px; }
-.section-tag { font-family:'Orbitron',sans-serif; font-size:10px; letter-spacing:5px; color:var(--green); text-transform:uppercase; opacity:.55; margin-bottom:9px; }
-.section-title { font-family:'Orbitron',sans-serif; font-size:clamp(20px,3.2vw,38px); font-weight:900; color:#fff; letter-spacing:3px; }
-.section-title span { color:var(--green); }
-.section-line { width:65px; height:2px; background:linear-gradient(90deg,transparent,var(--green),transparent); margin:13px auto 0; }
-
-/* ── WHY US ── */
-#why { background:rgba(0,0,0,.2); }
-.why-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:18px; max-width:1100px; margin:0 auto; }
-.why-card {
-  background:var(--card-bg); border:1px solid var(--border); border-radius:6px; padding:26px 20px;
-  text-align:center; transition:all .35s;
-}
-.why-card:hover { border-color:var(--green); box-shadow:0 0 20px rgba(0,255,156,.1); transform:translateY(-5px); }
-.why-icon { font-size:28px; margin-bottom:12px; display:block; }
-.why-title { font-family:'Orbitron',sans-serif; font-size:12px; color:var(--green); font-weight:700; letter-spacing:2px; margin-bottom:7px; }
-.why-desc { font-size:13px; color:#555; line-height:1.6; }
-
-/* ── SERVICES ── */
-#services { background:rgba(0,255,156,.01); }
-.services-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; max-width:1300px; margin:0 auto; }
-.service-card {
-  background:var(--card-bg); border:1px solid var(--border); border-radius:6px; padding:24px;
-  transition:all .4s; position:relative; overflow:hidden; cursor:pointer;
-}
-.service-card::before {
-  content:''; position:absolute; top:0; left:-100%; width:100%; height:2px;
-  background:linear-gradient(90deg,transparent,var(--green),transparent); transition:left .5s;
-}
-.service-card:hover::before { left:100%; }
-.service-card:hover { border-color:var(--green); box-shadow:0 0 26px rgba(0,255,156,.1); transform:translateY(-5px); }
-.service-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
-.service-num { font-family:'Orbitron',sans-serif; font-size:9px; color:var(--orange); letter-spacing:3px; }
-.service-badge {
-  padding:2px 9px; border-radius:99px; font-size:8px; letter-spacing:2px;
+.stat-item:last-child{border-right:none;}
+.stat-num{
   font-family:'Orbitron',sans-serif;
-  background:rgba(0,255,156,.08); border:1px solid rgba(0,255,156,.2); color:var(--green);
+  font-size:24px;font-weight:900;color:var(--g);
+  text-shadow:0 0 12px rgba(0,255,156,.4);display:block;
 }
-.service-name { font-family:'Orbitron',sans-serif; font-size:14px; color:var(--green); font-weight:700; margin-bottom:13px; letter-spacing:1px; text-shadow:0 0 8px rgba(0,255,156,.2); }
-.service-features { list-style:none; }
-.service-features li {
-  font-size:11px; color:#888; padding:3px 0;
-  border-bottom:1px solid rgba(255,255,255,.03);
-  display:flex; align-items:center; gap:7px; letter-spacing:.3px;
-}
-.service-features li::before { content:'+'; color:var(--green); font-weight:700; font-size:12px; min-width:11px; }
-.service-footer {
-  margin-top:14px; padding-top:12px; border-top:1px solid var(--border);
-  display:flex; align-items:center; justify-content:space-between;
-}
-.service-price { font-family:'Orbitron',sans-serif; font-size:9px; color:#333; letter-spacing:2px; }
-.service-btn {
-  padding:5px 12px; background:transparent; color:var(--green);
-  border:1px solid var(--green); border-radius:3px;
-  font-family:'Orbitron',sans-serif; font-size:8px; letter-spacing:2px;
-  cursor:pointer; text-decoration:none; transition:all .3s; display:inline-block;
-}
-.service-btn:hover { background:var(--green); color:#000; }
+.stat-label{font-size:9px;color:#3a4a5a;letter-spacing:3px;text-transform:uppercase;margin-top:3px;}
 
-/* ── TEAM ── */
-#team { background:rgba(0,0,0,.3); }
-.rank-section { max-width:1200px; margin:0 auto 44px; }
-.rank-label {
-  font-family:'Orbitron',sans-serif; font-size:10px; letter-spacing:5px;
-  text-transform:uppercase; margin-bottom:18px;
-  display:flex; align-items:center; gap:14px;
+/* ══ BUTTONS ══ */
+.btn-p{
+  padding:12px 28px;background:var(--g);color:#000;
+  font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;
+  border:none;border-radius:3px;cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:7px;
+  transition:all .3s;position:relative;overflow:hidden;
 }
-.rank-label::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--border),transparent); }
-.founder-label { color:var(--orange); }
-.owner-label   { color:var(--green); }
-.coowner-label { color:#7777ff; }
-.staff-label   { color:#444; }
-
-.team-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; }
-.team-grid.founder-grid { grid-template-columns: minmax(190px,300px); justify-content:center; }
-
-.team-card {
-  background:var(--card-bg); border:1px solid var(--border); border-radius:6px; padding:22px 18px;
-  text-align:center; transition:all .3s; position:relative; overflow:hidden;
+.btn-p::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);transform:translateX(-100%);transition:transform .5s;}
+.btn-p:hover::after{transform:translateX(100%);}
+.btn-p:hover{background:var(--g2);box-shadow:0 0 22px rgba(0,255,156,.4);transform:translateY(-2px);}
+.btn-o{
+  padding:12px 28px;background:transparent;color:var(--g);
+  font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;
+  border:1px solid rgba(0,255,156,.4);border-radius:3px;cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:7px;transition:all .3s;
 }
-.team-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; opacity:0; transition:opacity .3s; }
-.team-card.founder-card::after { background:var(--orange); }
-.team-card.owner-card::after   { background:var(--green); }
-.team-card.coowner-card::after { background:#7777ff; }
-.team-card.staff-card::after   { background:#333; }
-.team-card:hover { transform:translateY(-4px); }
-.team-card:hover::after { opacity:1; }
-.team-card.founder-card:hover { border-color:var(--orange); box-shadow:0 0 20px rgba(255,106,0,.12); }
-.team-card.owner-card:hover   { border-color:var(--green);  box-shadow:0 0 20px rgba(0,255,156,.1); }
-.team-card.coowner-card:hover { border-color:#7777ff;       box-shadow:0 0 20px rgba(119,119,255,.1); }
-.team-card.staff-card:hover   { border-color:#333; }
+.btn-o:hover{background:var(--g);color:#000;border-color:var(--g);box-shadow:0 0 22px rgba(0,255,156,.35);transform:translateY(-2px);}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;}
 
-.team-avatar {
-  width:56px; height:56px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900; color:#000;
+/* ══ SECTION COMMON ══ */
+section{padding:90px 60px;}
+.sec-head{text-align:center;margin-bottom:56px;}
+.sec-eye{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;font-size:9px;color:rgba(0,255,156,.5);
+  letter-spacing:5px;text-transform:uppercase;margin-bottom:10px;
+}
+.sec-eye::before,.sec-eye::after{content:'';width:20px;height:1px;background:rgba(0,255,156,.2);}
+.sec-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(20px,3vw,36px);font-weight:900;
+  color:#fff;letter-spacing:3px;
+}
+.sec-title em{color:var(--g);font-style:normal;}
+.sec-rule{
+  width:60px;height:1px;margin:14px auto 0;
+  background:linear-gradient(90deg,transparent,var(--g),transparent);
+}
+
+/* ══ WHY SECTION ══ */
+#why{background:var(--bg2);}
+.why-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;max-width:1080px;margin:0 auto;
+}
+.why-card{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:6px;padding:24px 18px;text-align:center;
+  transition:all .3s;
+}
+.why-card:hover{border-color:rgba(0,255,156,.3);box-shadow:0 0 20px rgba(0,255,156,.07);transform:translateY(-4px);}
+.why-icon{font-size:26px;display:block;margin-bottom:10px;}
+.why-t{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--g);font-weight:700;letter-spacing:2px;margin-bottom:7px;}
+.why-d{font-size:13px;color:var(--dim);line-height:1.6;}
+
+/* ══ SERVICES ══ */
+#services{background:var(--bg);}
+.svc-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+  gap:18px;max-width:1300px;margin:0 auto;
+}
+.svc-card{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:6px;padding:22px;
+  transition:all .35s;position:relative;overflow:hidden;
+  cursor:pointer;
+}
+/* Top glow line sweep on hover */
+.svc-card::before{
+  content:'';position:absolute;top:0;left:-100%;
+  width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--g),transparent);
+  transition:left .5s;
+}
+.svc-card:hover::before{left:100%;}
+.svc-card:hover{
+  border-color:rgba(0,255,156,.3);
+  box-shadow:0 0 24px rgba(0,255,156,.08),0 8px 30px rgba(0,0,0,.4);
+  transform:translateY(-4px);
+}
+.svc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.svc-num{font-family:'Orbitron',sans-serif;font-size:9px;color:var(--o);letter-spacing:3px;}
+.svc-badge{
+  padding:2px 8px;border-radius:99px;
+  font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;
+  background:rgba(0,255,156,.06);border:1px solid rgba(0,255,156,.15);color:var(--g);
+}
+.svc-name{
+  font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;
+  color:#fff;letter-spacing:1px;margin-bottom:13px;
+}
+.svc-name span{color:var(--g);}
+.svc-list{list-style:none;}
+.svc-list li{
+  font-size:12px;color:var(--dim);
+  padding:3px 0;border-bottom:1px solid rgba(255,255,255,.025);
+  display:flex;align-items:center;gap:7px;
+}
+.svc-list li::before{content:'+';color:var(--g);font-weight:700;min-width:10px;font-size:12px;}
+.svc-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:13px;padding-top:11px;border-top:1px solid rgba(0,255,156,.07);
+}
+.svc-price{font-family:'Orbitron',sans-serif;font-size:8px;color:#2a3a4a;letter-spacing:2px;}
+.svc-btn{
+  padding:4px 11px;background:transparent;color:var(--g);
+  border:1px solid rgba(0,255,156,.3);border-radius:3px;
+  font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;
+  text-decoration:none;cursor:pointer;transition:all .25s;display:inline-block;
+}
+.svc-btn:hover{background:var(--g);color:#000;border-color:var(--g);}
+
+/* ══ TEAM ══ */
+#team{background:var(--bg2);}
+.rank-block{max-width:1160px;margin:0 auto 44px;}
+.rank-head{
+  display:flex;align-items:center;gap:12px;
+  font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:5px;
+  text-transform:uppercase;margin-bottom:16px;
+}
+.rank-head::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--bdr),transparent);}
+.rh-founder{color:var(--o);}
+.rh-owner  {color:var(--g);}
+.rh-coowner{color:#7788ff;}
+.rh-junior {color:#aa66ff;}
+.tm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
+.tm-grid.solo{grid-template-columns:minmax(180px,280px);justify-content:center;}
+.tm-card{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:6px;padding:20px 16px;text-align:center;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.tm-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;opacity:0;transition:opacity .3s;}
+.tm-card.fc::after{background:var(--o);}
+.tm-card.oc::after{background:var(--g);}
+.tm-card.cc::after{background:#7788ff;}
+.tm-card.jc::after{background:#aa66ff;}
+.tm-card:hover{transform:translateY(-3px);}
+.tm-card:hover::after{opacity:1;}
+.tm-card.fc:hover{border-color:rgba(255,106,0,.3);box-shadow:0 0 18px rgba(255,106,0,.1);}
+.tm-card.oc:hover{border-color:rgba(0,255,156,.25);box-shadow:0 0 18px rgba(0,255,156,.08);}
+.tm-card.cc:hover{border-color:rgba(119,136,255,.3);box-shadow:0 0 18px rgba(119,136,255,.1);}
+.tm-card.jc:hover{border-color:rgba(170,102,255,.3);box-shadow:0 0 18px rgba(170,102,255,.1);}
+
+.tm-av{
+  width:52px;height:52px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;font-size:17px;font-weight:900;color:#000;
   margin:0 auto 12px;
 }
-.founder-av { background:linear-gradient(135deg,var(--orange),#ff3300); box-shadow:0 0 14px rgba(255,106,0,.4); }
-.owner-av   { background:linear-gradient(135deg,var(--green),#00ccff); box-shadow:0 0 12px rgba(0,255,156,.3); }
-.coowner-av { background:linear-gradient(135deg,#7777ff,#cc44ff); box-shadow:0 0 12px rgba(119,119,255,.3); }
-.staff-av   { background:linear-gradient(135deg,#222,#444); }
+.av-f{background:linear-gradient(135deg,var(--o),#ff2200);box-shadow:0 0 12px rgba(255,106,0,.35);}
+.av-o{background:linear-gradient(135deg,var(--g),#00ccff);box-shadow:0 0 11px rgba(0,255,156,.25);}
+.av-c{background:linear-gradient(135deg,#7788ff,#cc44ff);box-shadow:0 0 11px rgba(119,136,255,.25);}
+.av-j{background:linear-gradient(135deg,#aa66ff,#ff44aa);box-shadow:0 0 11px rgba(170,102,255,.25);}
 
-.team-name { font-family:'Orbitron',sans-serif; font-size:13px; color:#fff; font-weight:700; letter-spacing:2px; }
-.team-role { font-size:11px; color:var(--green); margin-top:3px; letter-spacing:2px; text-transform:uppercase; }
-.team-age  { font-size:10px; color:#333; margin-top:2px; letter-spacing:1px; }
-.team-rank-badge {
-  display:inline-block; margin-top:9px; padding:2px 9px; border-radius:99px;
-  font-size:8px; letter-spacing:2px; font-family:'Orbitron',sans-serif;
+.tm-name{font-family:'Orbitron',sans-serif;font-size:12px;color:#fff;font-weight:700;letter-spacing:2px;}
+.tm-role{font-size:11px;margin-top:3px;letter-spacing:1.5px;text-transform:uppercase;}
+.tm-age {font-size:10px;color:#2a3a4a;margin-top:2px;}
+.tm-badge{
+  display:inline-block;margin-top:8px;
+  padding:2px 8px;border-radius:99px;
+  font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;
 }
-.badge-founder { background:rgba(255,106,0,.1); border:1px solid var(--orange); color:var(--orange); }
-.badge-owner   { background:rgba(0,255,156,.07); border:1px solid var(--green); color:var(--green); }
-.badge-coowner { background:rgba(119,119,255,.08); border:1px solid #7777ff; color:#9999ff; }
-.badge-staff   { background:rgba(255,255,255,.03); border:1px solid #2a2a2a; color:#555; }
+.b-f{background:rgba(255,106,0,.08);border:1px solid rgba(255,106,0,.3);color:var(--o);}
+.b-o{background:rgba(0,255,156,.06);border:1px solid rgba(0,255,156,.2);color:var(--g);}
+.b-c{background:rgba(119,136,255,.07);border:1px solid rgba(119,136,255,.25);color:#9999ff;}
+.b-j{background:rgba(170,102,255,.07);border:1px solid rgba(170,102,255,.25);color:#cc88ff;}
 
-/* ── HOW TO BUY ── */
-#howtobuy { background:rgba(0,255,156,.012); }
-.steps-wrap { max-width:860px; margin:0 auto; position:relative; }
-.steps-line { position:absolute; left:27px; top:0; bottom:0; width:1px; background:linear-gradient(180deg,var(--green),transparent); }
-.step-item { display:flex; gap:22px; align-items:flex-start; margin-bottom:32px; }
-.step-num {
-  min-width:54px; height:54px; background:rgba(0,255,156,.07);
-  border:1px solid var(--border); border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-family:'Orbitron',sans-serif; font-size:15px; font-weight:900;
-  color:var(--green); text-shadow:0 0 8px var(--green);
-  position:relative; z-index:1; flex-shrink:0;
+/* ══ HOW TO BUY ══ */
+#buy{background:var(--bg);}
+.buy-wrap{max-width:820px;margin:0 auto;position:relative;}
+.buy-line{position:absolute;left:26px;top:6px;bottom:6px;width:1px;background:linear-gradient(180deg,var(--g),transparent);}
+.buy-step{display:flex;gap:20px;align-items:flex-start;margin-bottom:28px;}
+.buy-num{
+  min-width:52px;height:52px;border-radius:50%;flex-shrink:0;
+  background:rgba(0,255,156,.05);border:1px solid rgba(0,255,156,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;font-size:14px;font-weight:900;
+  color:var(--g);text-shadow:0 0 8px rgba(0,255,156,.3);
+  position:relative;z-index:1;
 }
-.step-title { font-family:'Orbitron',sans-serif; font-size:13px; color:#fff; font-weight:700; letter-spacing:2px; margin-bottom:5px; }
-.step-desc { font-size:13px; color:#555; line-height:1.7; letter-spacing:.4px; }
+.buy-t{font-family:'Orbitron',sans-serif;font-size:12px;color:#fff;font-weight:700;letter-spacing:2px;margin-bottom:5px;}
+.buy-d{font-size:13px;color:var(--dim);line-height:1.65;}
 
-/* ── CONTACT ── */
-#contact { background:rgba(0,0,0,.2); }
-.contact-wrap { max-width:780px; margin:0 auto; text-align:center; }
-.contact-links { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:32px; }
-.contact-btn {
-  display:flex; align-items:center; gap:9px; padding:12px 24px; border-radius:5px;
-  text-decoration:none; font-family:'Orbitron',sans-serif; font-size:10px; font-weight:700; letter-spacing:2px; transition:all .3s;
+/* ══ CONTACT ══ */
+#contact{background:var(--bg2);}
+.ct-wrap{max-width:760px;margin:0 auto;text-align:center;}
+.ct-socials{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:28px;}
+.ct-btn{
+  display:flex;align-items:center;gap:9px;
+  padding:11px 22px;border-radius:4px;text-decoration:none;
+  font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;
+  transition:all .3s;
 }
-.contact-btn:hover { transform:translateY(-3px); }
-.btn-discord { background:#5865F2; color:#fff; }
-.btn-discord:hover { box-shadow:0 0 24px rgba(88,101,242,.5); }
-.btn-insta { background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color:#fff; }
-.btn-insta:hover { box-shadow:0 0 24px rgba(220,39,67,.4); }
-.btn-yt { background:#FF0000; color:#fff; }
-.btn-yt:hover { box-shadow:0 0 24px rgba(255,0,0,.4); }
-.contact-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-bottom:32px; }
-.contact-info-card { background:var(--card-bg); border:1px solid var(--border); border-radius:5px; padding:16px; text-align:left; }
-.ci-label { font-family:'Orbitron',sans-serif; font-size:8px; color:#333; letter-spacing:3px; text-transform:uppercase; margin-bottom:5px; }
-.ci-value { font-size:13px; color:var(--green); letter-spacing:1px; }
+.ct-btn:hover{transform:translateY(-2px);}
+.c-dc{background:#5865F2;color:#fff;}
+.c-dc:hover{box-shadow:0 0 20px rgba(88,101,242,.4);}
+.c-ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;}
+.c-ig:hover{box-shadow:0 0 20px rgba(220,39,67,.35);}
+.c-yt{background:#FF0000;color:#fff;}
+.c-yt:hover{box-shadow:0 0 20px rgba(255,0,0,.35);}
 
-/* ── FOOTER ── */
-footer { position:relative; z-index:2; background:rgba(0,0,0,.65); border-top:1px solid var(--border); }
-.footer-top { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px; padding:36px 58px 26px; }
-.footer-brand { display:flex; align-items:center; gap:10px; }
-.footer-brand img { width:32px; height:32px; border-radius:50%; filter:drop-shadow(0 0 6px var(--green)); }
-.footer-brand-text { font-family:'Orbitron',sans-serif; font-size:13px; color:var(--green); text-shadow:0 0 7px var(--green); font-weight:700; letter-spacing:2px; }
-.footer-links { display:flex; gap:22px; flex-wrap:wrap; }
-.footer-links a { font-family:'Orbitron',sans-serif; font-size:9px; color:#333; letter-spacing:2px; text-decoration:none; text-transform:uppercase; transition:color .3s; }
-.footer-links a:hover { color:var(--green); }
-.footer-bottom { border-top:1px solid rgba(0,255,156,.05); padding:14px 58px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
-.footer-copy { font-family:'Orbitron',sans-serif; font-size:9px; color:#2a2a2a; letter-spacing:2px; }
-.footer-copy span { color:var(--green); }
-.footer-rights { font-size:9px; color:#222; letter-spacing:2px; font-family:'Orbitron',sans-serif; }
+.ct-info{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:11px;margin-bottom:28px;
+}
+.ct-card{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:5px;padding:14px 16px;text-align:left;
+}
+.ct-lbl{font-family:'Orbitron',sans-serif;font-size:8px;color:#2a3a4a;letter-spacing:3px;text-transform:uppercase;margin-bottom:5px;}
+.ct-val{font-size:13px;color:var(--g);letter-spacing:.5px;}
 
-/* ── REVEAL ── */
-.reveal { opacity:0; transform:translateY(32px); transition:opacity .7s ease,transform .7s ease; }
-.reveal.visible { opacity:1; transform:translateY(0); }
+/* ══ FOOTER ══ */
+footer{
+  position:relative;z-index:3;
+  background:rgba(0,0,0,.75);
+  border-top:1px solid var(--bdr);
+}
+.ft-top{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:18px;padding:32px 58px 22px;
+}
+.ft-brand{display:flex;align-items:center;gap:10px;}
+.ft-brand img{width:30px;height:30px;border-radius:50%;filter:drop-shadow(0 0 5px var(--g));}
+.ft-name{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:var(--g);letter-spacing:2px;text-shadow:0 0 6px rgba(0,255,156,.3);}
+.ft-tagline{font-size:9px;color:#1e2a38;letter-spacing:3px;font-family:'Orbitron',sans-serif;margin-top:2px;}
+.ft-links{display:flex;gap:20px;flex-wrap:wrap;}
+.ft-links a{font-family:'Orbitron',sans-serif;font-size:9px;color:#1e2a38;letter-spacing:2px;text-decoration:none;text-transform:uppercase;transition:color .25s;}
+.ft-links a:hover{color:var(--g);}
+.ft-bot{
+  border-top:1px solid rgba(0,255,156,.04);
+  padding:12px 58px;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:8px;
+}
+.ft-copy{font-family:'Orbitron',sans-serif;font-size:8px;color:#15202e;letter-spacing:2px;}
+.ft-copy em{color:var(--g);font-style:normal;}
+.ft-r{font-size:8px;color:#10181f;letter-spacing:2px;font-family:'Orbitron',sans-serif;}
+
+/* ══ REVEAL ANIMATION ══ */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
+.rv.on{opacity:1;transform:translateY(0);}
 
 @media(max-width:768px){
-  nav { padding:10px 16px; }
-  nav ul { display:none; }
-  section { padding:56px 16px; }
-  .footer-top,.footer-bottom { padding:24px 16px; }
-  .hero-stats { gap:26px; padding:16px 18px; }
+  nav{padding:0 14px;}
+  nav ul{display:none;}
+  section{padding:56px 14px;}
+  .ft-top,.ft-bot{padding:22px 14px;}
+  .stat-bar{flex-wrap:wrap;}
+  .stat-item{min-width:40%;}
 }
 </style>
 </head>
 <body>
 
-<!-- LOADER -->
+<!-- ══ LOADER ══ -->
 <div id="loader">
-  <img src="logo.gif" class="loader-logo" alt="logo" onerror="this.style.display='none'">
-  <div class="loader-title">ZORO X CHEATS</div>
-  <div class="loader-sub">Panel Gaming System</div>
-  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
-  <div class="loader-pct" id="lpct">LOADING... 0%</div>
+  <img src="logo.gif" class="ld-logo" alt="" onerror="this.style.display='none'">
+  <div class="ld-name">ZORO X CHEATS</div>
+  <div class="ld-sub">Panel Gaming System</div>
+  <div class="ld-track"><div class="ld-fill"></div></div>
+  <div class="ld-pct" id="lpct">LOADING... 0%</div>
 </div>
 
+<!-- ══ BACKGROUND ══ -->
 <canvas id="bgcanvas"></canvas>
+<div class="bg-overlay"></div>
 <div class="scanlines"></div>
 
-<!-- NAVBAR -->
+<!-- ══ NAVBAR ══ -->
 <nav>
-  <div class="nav-logo">
+  <div class="nav-left">
     <img src="logo.gif" alt="Logo">
-    <div class="nav-brand">ZORO X CHEATS</div>
+    <span class="nav-brand">ZORO X CHEATS</span>
   </div>
   <ul>
     <li><a href="#why">Features</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#team">Team</a></li>
-    <li><a href="#howtobuy">How To Buy</a></li>
+    <li><a href="#buy">How To Buy</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="nav-cta">Discord</a></li>
+    <li><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="nav-dc">Discord</a></li>
   </ul>
 </nav>
 
-<!-- TICKER -->
-<div class="ticker-wrap">
+<!-- ══ TICKER ══ -->
+<div class="ticker">
   <div class="ticker-inner">
     <span class="ticker-item">⚡ ZORO X CHEATS</span>
     <span class="ticker-item">🎯 PANEL GAMING SYSTEM</span>
@@ -446,84 +504,86 @@ footer { position:relative; z-index:2; background:rgba(0,0,0,.65); border-top:1p
   </div>
 </div>
 
+<!-- ══ ALL CONTENT ══ -->
+<div class="content">
+
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-banner reveal">
+  <div class="hero-banner rv">
     <img src="banner.gif" alt="Zoro X Cheats Banner">
   </div>
-  <img src="logo.gif" class="hero-logo reveal" alt="Logo">
-  <h1 class="hero-title reveal">ZORO X CHEATS</h1>
-  <p class="hero-sub reveal">Panel Gaming System</p>
-  <p class="hero-tagline reveal">⚡ Advanced Tools &nbsp;·&nbsp; Private Builds &nbsp;·&nbsp; 101% Safe</p>
-  <div class="hero-btns reveal">
-    <a href="#services" class="btn-primary">🎯 View Services</a>
-    <a href="https://discord.gg/fJhh8XcHav" target="_blank" class="btn-outline">💬 Join Discord</a>
-    <a href="#howtobuy" class="btn-outline">💎 How To Buy</a>
+  <img src="logo.gif" class="hero-logo rv" alt="Logo">
+  <h1 class="hero-title rv">ZORO <span>X</span> CHEATS</h1>
+  <p class="hero-sub rv">Panel Gaming System</p>
+  <p class="hero-tag rv"><span>⚡</span> Advanced Tools &nbsp;·&nbsp; Private Builds &nbsp;·&nbsp; <span>101% Safe</span></p>
+  <div class="btn-row rv">
+    <a href="#services" class="btn-p">🎯 View Services</a>
+    <a href="https://discord.gg/fJhh8XcHav" target="_blank" class="btn-o">💬 Discord</a>
+    <a href="#buy" class="btn-o">💎 How To Buy</a>
   </div>
-  <div class="hero-stats reveal">
-    <div class="stat-item"><span class="stat-num" data-target="10">0</span><span class="stat-label">Services</span></div>
-    <div class="stat-item"><span class="stat-num" data-target="40">0</span><span class="stat-label">Safe Matches+</span></div>
-    <div class="stat-item"><span class="stat-num" data-target="101">0</span><span class="stat-label">% Anti Ban</span></div>
-    <div class="stat-item"><span class="stat-num" data-target="8">0</span><span class="stat-label">Team Members</span></div>
+  <div class="stat-bar rv">
+    <div class="stat-item"><span class="stat-num" data-t="10">0</span><div class="stat-label">Services</div></div>
+    <div class="stat-item"><span class="stat-num" data-t="40">0</span><div class="stat-label">Safe Matches+</div></div>
+    <div class="stat-item"><span class="stat-num" data-t="101">0</span><div class="stat-label">% Anti Ban</div></div>
+    <div class="stat-item"><span class="stat-num" data-t="9">0</span><div class="stat-label">Team Members</div></div>
   </div>
 </section>
 
-<!-- WHY US -->
+<!-- WHY -->
 <section id="why">
-  <div class="section-header reveal">
-    <div class="section-tag">Why Choose Us</div>
-    <h2 class="section-title">WHY <span>ZORO X CHEATS</span></h2>
-    <div class="section-line"></div>
+  <div class="sec-head rv">
+    <div class="sec-eye">Why Choose Us</div>
+    <h2 class="sec-title">WHY <em>ZORO X CHEATS</em></h2>
+    <div class="sec-rule"></div>
   </div>
   <div class="why-grid">
-    <div class="why-card reveal"><span class="why-icon">🛡️</span><div class="why-title">101% Anti Ban</div><div class="why-desc">All panels tested and verified safe. Your main ID stays protected at all times.</div></div>
-    <div class="why-card reveal"><span class="why-icon">⚡</span><div class="why-title">Zero Delay</div><div class="why-desc">Aimkill and Silent Aim running at 0 delay — fastest panels in the market.</div></div>
-    <div class="why-card reveal"><span class="why-icon">🖥️</span><div class="why-title">All Emulators</div><div class="why-desc">Working on all 32-bit and 64-bit emulators including MSI and BlueStacks.</div></div>
-    <div class="why-card reveal"><span class="why-icon">🔥</span><div class="why-title">No Fake Damage</div><div class="why-desc">No rank drop, no fake damage on girl characters, no need to drag.</div></div>
-    <div class="why-card reveal"><span class="why-icon">🎮</span><div class="why-title">Custom Builds</div><div class="why-desc">Request custom panels built specifically for your gameplay style and needs.</div></div>
-    <div class="why-card reveal"><span class="why-icon">💬</span><div class="why-title">24/7 Support</div><div class="why-desc">Open a ticket on Discord anytime. Fast response, all issues resolved.</div></div>
+    <div class="why-card rv"><span class="why-icon">🛡️</span><div class="why-t">101% Anti Ban</div><div class="why-d">All panels tested and verified safe. Your main ID stays fully protected.</div></div>
+    <div class="why-card rv"><span class="why-icon">⚡</span><div class="why-t">Zero Delay</div><div class="why-d">Aimkill and Silent Aim at 0 delay. Fastest panels in the market.</div></div>
+    <div class="why-card rv"><span class="why-icon">🖥️</span><div class="why-t">All Emulators</div><div class="why-d">32-bit and 64-bit support. MSI, BlueStacks, LDPlayer and more.</div></div>
+    <div class="why-card rv"><span class="why-icon">🔥</span><div class="why-t">No Fake Damage</div><div class="why-d">No rank drop, no fake damage on girl characters, no drag needed.</div></div>
+    <div class="why-card rv"><span class="why-icon">🎮</span><div class="why-t">Custom Builds</div><div class="why-d">Request panels built exactly for your gameplay style and device.</div></div>
+    <div class="why-card rv"><span class="why-icon">💬</span><div class="why-t">24/7 Support</div><div class="why-d">Open a ticket on Discord anytime. Fast reply, every issue resolved.</div></div>
   </div>
 </section>
 
 <!-- SERVICES -->
 <section id="services">
-  <div class="section-header reveal">
-    <div class="section-tag">What We Offer</div>
-    <h2 class="section-title">OUR <span>10 SERVICES</span></h2>
-    <div class="section-line"></div>
+  <div class="sec-head rv">
+    <div class="sec-eye">What We Offer</div>
+    <h2 class="sec-title">OUR <em>10 SERVICES</em></h2>
+    <div class="sec-rule"></div>
   </div>
-  <div class="services-grid">
+  <div class="svc-grid">
 
-    <div class="service-card reveal">
-      <div class="service-head"><div class="service-num">SERVICE 01</div><div class="service-badge">INTERNAL</div></div>
-      <div class="service-name">INTERNAL V1</div>
-      <ul class="service-features">
-        <li>Aimbot Visible</li><li>Aimbot Rage</li><li>Adjustable FOV 360</li>
+    <div class="svc-card rv">
+      <div class="svc-top"><span class="svc-num">01</span><span class="svc-badge">INTERNAL</span></div>
+      <div class="svc-name"><span>INTERNAL</span> V1</div>
+      <ul class="svc-list">
+        <li>Aimbot Visible / Rage</li><li>Adjustable FOV 360</li>
         <li>Ignore Knock / No Recoil</li><li>Aim Key Bind</li>
         <li>ESP Line (Upper)</li><li>ESP Health / Box / Fill</li>
         <li>ESP Skeleton / Distance / Weapon</li><li>Stream Mode</li>
       </ul>
-      <div class="service-footer"><div class="service-price">TICKET FOR PRICE</div><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="service-btn">BUY NOW</a></div>
+      <div class="svc-foot"><span class="svc-price">OPEN TICKET FOR PRICE</span><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="svc-btn">BUY</a></div>
     </div>
 
-    <div class="service-card reveal">
-      <div class="service-head"><div class="service-num">SERVICE 02</div><div class="service-badge">INTERNAL</div></div>
-      <div class="service-name">INTERNAL V2</div>
-      <ul class="service-features">
+    <div class="svc-card rv">
+      <div class="svc-top"><span class="svc-num">02</span><span class="svc-badge">INTERNAL</span></div>
+      <div class="svc-name"><span>INTERNAL</span> V2</div>
+      <ul class="svc-list">
         <li>Real Aimbot / Hex / Rage</li><li>Fast Reload / No Recoil</li>
         <li>Ignored Knocked</li><li>Adjustable AimFov &amp; Smoothness</li>
-        <li>Adjustable Range</li><li>ESP Line (Upper)</li>
+        <li>Adjustable Range</li><li>Fully Hidden ESP Lines</li>
         <li>Streamer Mode ESP</li><li>Auto Refresh Mode</li>
-        <li>Rendering Lag Fix</li><li>Fully Hidden ESP Lines</li>
-        <li>64 ND 32 Bit Emulator</li>
+        <li>Rendering Lag Fix</li><li>64 ND 32 Bit Emulator</li>
       </ul>
-      <div class="service-footer"><div class="service-price">TICKET FOR PRICE</div><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="service-btn">BUY NOW</a></div>
+      <div class="svc-foot"><span class="svc-price">OPEN TICKET FOR PRICE</span><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="svc-btn">BUY</a></div>
     </div>
 
-    <div class="service-card reveal">
-      <div class="service-head"><div class="service-num">SERVICE 03</div><div class="service-badge">SILENT AIM</div></div>
-      <div class="service-name">SILENT AIM COVER</div>
-      <ul class="service-features">
+    <div class="svc-card rv">
+      <div class="svc-top"><span class="svc-num">03</span><span class="svc-badge">SILENT AIM</span></div>
+      <div class="svc-name"><span>SILENT AIM</span> COVER</div>
+      <ul class="svc-list">
         <li>Aimbot Rage &amp; Visible</li><li>Silent Aim / No Recoil</li>
         <li>Aim FOV &amp; Distance</li><li>Spawn Kill / Enemy Pull / Tele Kill</li>
         <li>Speed &amp; Fast Reload</li><li>Streamer Mode / Block Internet</li>
@@ -531,100 +591,101 @@ footer { position:relative; z-index:2; background:rgba(0,0,0,.65); border-top:1p
         <li>ESP Name / Health / Weapon Icon</li>
         <li>ESP Mini Map / Refresh ESP</li><li>Stable / Safe / Smooth Loader</li>
       </ul>
-      <div class="service-footer"><div class="service-price">TICKET FOR PRICE</div><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="service-btn">BUY NOW</a></div>
+      <div class="svc-foot"><span class="svc-price">OPEN TICKET FOR PRICE</span><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="svc-btn">BUY</a></div>
     </div>
 
-    <div class="service-card reveal">
-      <div class="service-head"><div class="service-num">SERVICE 04</div><div class="service-badge">MAX PANEL</div></div>
-      <div class="service-name">SILENT AIM MAX</div>
-      <ul class="service-features">
+    <div class="svc-card rv">
+      <div class="svc-top"><span class="svc-num">04</span><span class="svc-badge">MAX</span></div>
+      <div class="svc-name"><span>SILENT AIM</span> MAX</div>
+      <ul class="svc-list">
         <li>Safe Over 40+ Matches</li><li>No Glitches &amp; No Issues</li>
         <li>Telekill / Up Player / Fast Reload</li>
-        <li>Aimbot Rage / Silent Aim / No Recoil</li>
+        <li>Silent Aim / No Recoil / Aimbot Rage</li>
         <li>Draw AimFov / Aimfov 360°</li>
         <li>Adjustable Aimbot &amp; Up Player Delay</li>
         <li>ESP Line Upper/Bottom/Center</li>
-        <li>ESP Weapon / Many Functions</li>
         <li>Auto Refresh ESP / Streamer Mode</li>
         <li>Adjustable ESP Colours</li><li>32 &amp; 64 Bit Emulator</li>
       </ul>
-      <div class="service-footer"><div class="service-price">TICKET FOR PRICE</div><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="service-btn">BUY NOW</a></div>
+      <div class="svc-foot"><span class="svc-price">OPEN TICKET FOR PRICE</span><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="svc-btn">BUY</a></div>
     </div>
 
-    <div class="service-card reveal">
-      <div class="service-head"><div class="service-num">SERVICE 05</div><div class="service-badge">AI BYPASS</div></div>
-      <div class="service-name">EMULATOR BYPASS</div>
-      <ul class="service-features">
+    <div class="svc-card rv">
+      <div class="svc-top"><span class="svc-num">05</span><span class="svc-badge">AI BYPASS</span></div>
+      <div class="svc-name"><span>EMULATOR</span> BYPASS</div>
+      <ul class="svc-list">
         <li>Start AI Bypass</li><li>Start Anti Cheat</li>
         <li>Scanner Priority</li><li>Streamer Mode</li>
         <li>Pin To Top / Temp Clean</li>
-        <li>Working 32 Bit Emulator</li><li>Working 64 Bit Emulator</li>
+        <li>32 &amp; 64 Bit Emulator</li>
       </ul>
-      <div class="service-footer"><div class="service-price">TICKET FOR PRICE</div><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="service-btn">BUY NOW</a></div>
+      <div class="svc-foot"><span class="svc-price">OPEN TICKET FOR PRICE</span><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="svc-btn">BUY</a></div>
     </div>
 
-    <div class="service-card reveal">
-      <div class="service-head"><div class="service-num">SERVICE 06</div><div class="service-badge">SNIPER</div></div>
-      <div class="service-name">SNIPER PANEL</div>
-      <ul class="service-features">
+    <div class="svc-card rv">
+      <div class="svc-top"><span class="svc-num">06</span><span class="svc-badge">SNIPER</span></div>
+      <div class="svc-name"><span>SNIPER</span> PANEL</div>
+      <ul class="svc-list">
         <li>Sniper Scope</li><li>Sniper Switch</li>
         <li>No Fake Damage On Girl Character</li>
         <li>No Rank Drop</li><li>No Need To Drag</li>
       </ul>
-      <div class="service-footer"><div class="service-price">TICKET FOR PRICE</div><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="service-btn">BUY NOW</a></div>
+      <div class="svc-foot"><span class="svc-price">OPEN TICKET FOR PRICE</span><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="svc-btn">BUY</a></div>
     </div>
 
-    <div class="service-card reveal">
-      <div class="service-head"><div class="service-num">SERVICE 07</div><div class="service-badge">ANTI BAN</div></div>
-      <div class="service-name">UID BYPASS</div>
-      <ul class="service-features">
-        <li>Works On All Servers</li><li>Custom, CS Rank &amp; BR Ranked Modes</li>
-        <li>Free Fire &amp; Free Fire Max</li><li>Gameplay Spectate Possible</li>
-        <li>PC to Mobile &amp; Mobile to PC Reconnect</li>
-        <li>Bypass AntiVirus</li><li>101% Anti Ban</li>
+    <div class="svc-card rv">
+      <div class="svc-top"><span class="svc-num">07</span><span class="svc-badge">ANTI BAN</span></div>
+      <div class="svc-name"><span>UID</span> BYPASS</div>
+      <ul class="svc-list">
+        <li>Works On All Servers</li><li>Custom, CS Rank &amp; BR Ranked</li>
+        <li>Free Fire &amp; Free Fire Max</li>
+        <li>Spectate &amp; Reconnect Possible</li>
+        <li>PC ↔ Mobile Reconnect</li>
+        <li>Bypass AntiVirus / 101% Anti Ban</li>
         <li>Play With Phone Players</li>
-        <li>Aimbot Visible — Full Safe</li><li>All Emulator Working</li>
+        <li>Aimbot Visible — Full Safe</li>
       </ul>
-      <div class="service-footer"><div class="service-price">TICKET FOR PRICE</div><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="service-btn">BUY NOW</a></div>
+      <div class="svc-foot"><span class="svc-price">OPEN TICKET FOR PRICE</span><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="svc-btn">BUY</a></div>
     </div>
 
-    <div class="service-card reveal">
-      <div class="service-head"><div class="service-num">SERVICE 08</div><div class="service-badge">HARMOP</div></div>
-      <div class="service-name">AIMKILL OB50</div>
-      <ul class="service-features">
-        <li>Aimkill Max [0 Delay]</li><li>Aimkill 360 / Aimfov 360</li>
-        <li>Teleport [Spawn Kill]</li><li>Fly Kill / Down Kill</li>
+    <div class="svc-card rv">
+      <div class="svc-top"><span class="svc-num">08</span><span class="svc-badge">HARMOP</span></div>
+      <div class="svc-name"><span>AIMKILL</span> OB50</div>
+      <ul class="svc-list">
+        <li>Aimkill Max [0 Delay] / 360</li>
+        <li>Teleport [Spawn Kill]</li>
+        <li>Fly Kill / Down Kill</li>
         <li>Speed Joystick / Auto Switch</li>
         <li>Shake Kill Magnet / Tele Kill</li>
-        <li>Up Player / Climb Up</li>
-        <li>Speed Shifter &amp; Medikit</li>
+        <li>Up Player / Climb Up / Speed Shifter</li>
         <li>ESP Line / Name / Distance / Box / Health</li>
-        <li>Works Root / No Root / N32 / Pie 64</li>
-        <li>CSR &amp; Full Map — All Servers</li>
+        <li>Root / No Root / N32 / Pie 64</li>
+        <li>CSR &amp; Full Map / All Servers</li>
       </ul>
-      <div class="service-footer"><div class="service-price">TICKET FOR PRICE</div><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="service-btn">BUY NOW</a></div>
+      <div class="svc-foot"><span class="svc-price">OPEN TICKET FOR PRICE</span><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="svc-btn">BUY</a></div>
     </div>
 
-    <div class="service-card reveal">
-      <div class="service-head"><div class="service-num">SERVICE 09</div><div class="service-badge">MOBILE</div></div>
-      <div class="service-name">MOBILE PANEL</div>
-      <ul class="service-features">
+    <div class="svc-card rv">
+      <div class="svc-top"><span class="svc-num">09</span><span class="svc-badge">MOBILE</span></div>
+      <div class="svc-name"><span>MOBILE</span> PANEL</div>
+      <ul class="svc-list">
         <li>Location-Only Functions</li>
-        <li>Main ID Remains Safe</li><li>Mobile Optimized</li>
+        <li>Main ID Remains Safe</li>
+        <li>Mobile Optimized</li>
       </ul>
-      <div class="service-footer"><div class="service-price">TICKET FOR PRICE</div><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="service-btn">BUY NOW</a></div>
+      <div class="svc-foot"><span class="svc-price">OPEN TICKET FOR PRICE</span><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="svc-btn">BUY</a></div>
     </div>
 
-    <div class="service-card reveal">
-      <div class="service-head"><div class="service-num">SERVICE 10</div><div class="service-badge">CUSTOM</div></div>
-      <div class="service-name">CUSTOM PANEL</div>
-      <ul class="service-features">
+    <div class="svc-card rv">
+      <div class="svc-top"><span class="svc-num">10</span><span class="svc-badge">CUSTOM</span></div>
+      <div class="svc-name"><span>CUSTOM</span> PANEL</div>
+      <ul class="svc-list">
         <li>✅ Bypass Panel</li><li>🎯 Sniper Panel</li>
         <li>⚙️ Basic Panel</li><li>🎯 Silent Aim Cover Panel</li>
         <li>🖥️ External Panel</li>
-        <li>Custom Build On Your Request</li>
+        <li>Custom Build On Request</li>
       </ul>
-      <div class="service-footer"><div class="service-price">TICKET FOR PRICE</div><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="service-btn">BUY NOW</a></div>
+      <div class="svc-foot"><span class="svc-price">OPEN TICKET FOR PRICE</span><a href="https://discord.gg/fJhh8XcHav" target="_blank" class="svc-btn">BUY</a></div>
     </div>
 
   </div>
@@ -632,362 +693,285 @@ footer { position:relative; z-index:2; background:rgba(0,0,0,.65); border-top:1p
 
 <!-- TEAM -->
 <section id="team">
-  <div class="section-header reveal">
-    <div class="section-tag">The People Behind It</div>
-    <h2 class="section-title">OUR <span>TEAM</span></h2>
-    <div class="section-line"></div>
+  <div class="sec-head rv">
+    <div class="sec-eye">The People Behind It</div>
+    <h2 class="sec-title">OUR <em>TEAM</em></h2>
+    <div class="sec-rule"></div>
   </div>
 
   <!-- FOUNDER -->
-  <div class="rank-section reveal">
-    <div class="rank-label founder-label">👑 &nbsp;Founder</div>
-    <div class="team-grid founder-grid">
-      <div class="team-card founder-card">
-        <div class="team-avatar founder-av">Z</div>
-        <div class="team-name">ZORO</div>
-        <div class="team-role">Server Developer &amp; ZXC Developer</div>
-        <div class="team-age">Age 20</div>
-        <div class="team-rank-badge badge-founder">FOUNDER</div>
+  <div class="rank-block rv">
+    <div class="rank-head rh-founder">👑 &nbsp;Founder</div>
+    <div class="tm-grid solo">
+      <div class="tm-card fc">
+        <div class="tm-av av-f">Z</div>
+        <div class="tm-name">ZORO</div>
+        <div class="tm-role" style="color:var(--o)">Server &amp; ZXC Developer</div>
+        <div class="tm-age">Age 20</div>
+        <div class="tm-badge b-f">FOUNDER</div>
       </div>
     </div>
   </div>
 
   <!-- OWNERS -->
-  <div class="rank-section reveal">
-    <div class="rank-label owner-label">⚡ &nbsp;Owners</div>
-    <div class="team-grid">
-      <div class="team-card owner-card">
-        <div class="team-avatar owner-av">G</div>
-        <div class="team-name">GOJO</div>
-        <div class="team-role">UI Designer</div>
-        <div class="team-age">Age 20</div>
-        <div class="team-rank-badge badge-owner">OWNER</div>
+  <div class="rank-block rv">
+    <div class="rank-head rh-owner">⚡ &nbsp;Owners</div>
+    <div class="tm-grid">
+      <div class="tm-card oc">
+        <div class="tm-av av-o">G</div>
+        <div class="tm-name">GOJO</div>
+        <div class="tm-role" style="color:var(--g)">UI Designer</div>
+        <div class="tm-age">Age 20</div>
+        <div class="tm-badge b-o">OWNER</div>
       </div>
-      <div class="team-card owner-card">
-        <div class="team-avatar owner-av" style="background:linear-gradient(135deg,#00ff9c,#ffcc00)">Z</div>
-        <div class="team-name">ZENITSU</div>
-        <div class="team-role">ZXC Developer</div>
-        <div class="team-age">Age 21</div>
-        <div class="team-rank-badge badge-owner">OWNER</div>
+      <div class="tm-card oc">
+        <div class="tm-av av-o" style="background:linear-gradient(135deg,#00ff9c,#ffcc00)">Z</div>
+        <div class="tm-name">ZENITSU</div>
+        <div class="tm-role" style="color:var(--g)">ZXC Developer</div>
+        <div class="tm-age">Age 21</div>
+        <div class="tm-badge b-o">OWNER</div>
       </div>
-      <div class="team-card owner-card">
-        <div class="team-avatar owner-av" style="background:linear-gradient(135deg,#00ddff,#00ff9c)">J</div>
-        <div class="team-name">JURO</div>
-        <div class="team-role">UI Designer</div>
-        <div class="team-age">Age 20</div>
-        <div class="team-rank-badge badge-owner">OWNER</div>
+      <div class="tm-card oc">
+        <div class="tm-av av-o" style="background:linear-gradient(135deg,#00ddff,#00ff9c)">J</div>
+        <div class="tm-name">JURO</div>
+        <div class="tm-role" style="color:var(--g)">UI Designer</div>
+        <div class="tm-age">Age 20</div>
+        <div class="tm-badge b-o">OWNER</div>
       </div>
     </div>
   </div>
 
   <!-- CO-OWNERS -->
-  <div class="rank-section reveal">
-    <div class="rank-label coowner-label">🔷 &nbsp;Co-Owners</div>
-    <div class="team-grid">
-      <div class="team-card coowner-card">
-        <div class="team-avatar coowner-av">J</div>
-        <div class="team-name">JASU NAIDU</div>
-        <div class="team-role">Supporter</div>
-        <div class="team-age">Age 21</div>
-        <div class="team-rank-badge badge-coowner">CO-OWNER</div>
+  <div class="rank-block rv">
+    <div class="rank-head rh-coowner">🔷 &nbsp;Co-Owners</div>
+    <div class="tm-grid">
+      <div class="tm-card cc">
+        <div class="tm-av av-c">J</div>
+        <div class="tm-name">JASU NAIDU</div>
+        <div class="tm-role" style="color:#9999ff">Supporter</div>
+        <div class="tm-age">Age 21</div>
+        <div class="tm-badge b-c">CO-OWNER</div>
       </div>
-      <div class="team-card coowner-card">
-        <div class="team-avatar coowner-av" style="background:linear-gradient(135deg,#9933ff,#cc44ff)">L</div>
-        <div class="team-name">LUCKY PRIME</div>
-        <div class="team-role">Supporter</div>
-        <div class="team-age">Age 20</div>
-        <div class="team-rank-badge badge-coowner">CO-OWNER</div>
+      <div class="tm-card cc">
+        <div class="tm-av av-c" style="background:linear-gradient(135deg,#9933ff,#dd44ff)">L</div>
+        <div class="tm-name">LUCKY PRIME</div>
+        <div class="tm-role" style="color:#9999ff">Supporter</div>
+        <div class="tm-age">Age 20</div>
+        <div class="tm-badge b-c">CO-OWNER</div>
       </div>
     </div>
   </div>
 
-  <!-- STAFF -->
-  <div class="rank-section reveal">
-    <div class="rank-label staff-label">🔧 &nbsp;Staff Members</div>
-    <div class="team-grid">
-      <div class="team-card staff-card">
-        <div class="team-avatar staff-av">S</div>
-        <div class="team-name">SUNNY</div>
-        <div class="team-role">Staff Member</div>
-        <div class="team-age">Age 19</div>
-        <div class="team-rank-badge badge-staff">STAFF</div>
+  <!-- JUNIOR DEVELOPERS -->
+  <div class="rank-block rv">
+    <div class="rank-head rh-junior">🚀 &nbsp;Junior Developers</div>
+    <div class="tm-grid">
+      <div class="tm-card jc">
+        <div class="tm-av av-j">S</div>
+        <div class="tm-name">SUNNY</div>
+        <div class="tm-role" style="color:#cc88ff">Junior Developer</div>
+        <div class="tm-age">Age 19</div>
+        <div class="tm-badge b-j">JR. DEV</div>
       </div>
-      <div class="team-card staff-card">
-        <div class="team-avatar staff-av" style="background:linear-gradient(135deg,#1a1a1a,#444)">D</div>
-        <div class="team-name">DRAGON</div>
-        <div class="team-role">Staff Member</div>
-        <div class="team-age">Age 14</div>
-        <div class="team-rank-badge badge-staff">STAFF</div>
+      <div class="tm-card jc">
+        <div class="tm-av av-j" style="background:linear-gradient(135deg,#882299,#cc33ff)">D</div>
+        <div class="tm-name">DRAGON</div>
+        <div class="tm-role" style="color:#cc88ff">Junior Developer</div>
+        <div class="tm-age">Age 14</div>
+        <div class="tm-badge b-j">JR. DEV</div>
       </div>
     </div>
   </div>
+
 </section>
 
 <!-- HOW TO BUY -->
-<section id="howtobuy">
-  <div class="section-header reveal">
-    <div class="section-tag">Purchase Guide</div>
-    <h2 class="section-title">HOW TO <span>BUY</span></h2>
-    <div class="section-line"></div>
+<section id="buy">
+  <div class="sec-head rv">
+    <div class="sec-eye">Purchase Guide</div>
+    <h2 class="sec-title">HOW TO <em>BUY</em></h2>
+    <div class="sec-rule"></div>
   </div>
-  <div class="steps-wrap">
-    <div class="steps-line"></div>
-    <div class="step-item reveal">
-      <div class="step-num">01</div>
-      <div class="step-content">
-        <div class="step-title">JOIN OUR DISCORD</div>
-        <div class="step-desc">Click the Discord button and join our official server at discord.gg/fJhh8XcHav. Verify yourself to access all channels.</div>
-      </div>
+  <div class="buy-wrap">
+    <div class="buy-line"></div>
+    <div class="buy-step rv">
+      <div class="buy-num">01</div>
+      <div><div class="buy-t">JOIN OUR DISCORD</div><div class="buy-d">Click Join Discord and enter our server at discord.gg/fJhh8XcHav. Complete the verification to access all channels.</div></div>
     </div>
-    <div class="step-item reveal">
-      <div class="step-num">02</div>
-      <div class="step-content">
-        <div class="step-title">OPEN A TICKET</div>
-        <div class="step-desc">Go to the ticket channel and create a new support ticket. Tell us which panel or service you want to purchase.</div>
-      </div>
+    <div class="buy-step rv">
+      <div class="buy-num">02</div>
+      <div><div class="buy-t">OPEN A TICKET</div><div class="buy-d">Head to the ticket channel, create a new ticket, and tell us which panel or service you want.</div></div>
     </div>
-    <div class="step-item reveal">
-      <div class="step-num">03</div>
-      <div class="step-content">
-        <div class="step-title">COMPLETE PAYMENT</div>
-        <div class="step-desc">Our team will provide the price and payment details. We support multiple payment methods. Fast and secure process.</div>
-      </div>
+    <div class="buy-step rv">
+      <div class="buy-num">03</div>
+      <div><div class="buy-t">COMPLETE PAYMENT</div><div class="buy-d">Our team sends the price and payment details. Multiple payment methods available. Fast and secure.</div></div>
     </div>
-    <div class="step-item reveal">
-      <div class="step-num">04</div>
-      <div class="step-content">
-        <div class="step-title">RECEIVE YOUR PANEL</div>
-        <div class="step-desc">After payment is confirmed, you receive your panel instantly. Full setup guide and 24/7 support included.</div>
-      </div>
+    <div class="buy-step rv">
+      <div class="buy-num">04</div>
+      <div><div class="buy-t">RECEIVE YOUR PANEL</div><div class="buy-d">Panel delivered instantly after payment. Full setup guide and 24/7 after-support included.</div></div>
     </div>
-    <div style="text-align:center;margin-top:38px;" class="reveal">
-      <a href="https://discord.gg/fJhh8XcHav" target="_blank" class="btn-primary" style="font-size:12px;padding:15px 42px;">
-        💎 Open A Ticket Now
-      </a>
+    <div style="text-align:center;margin-top:36px;" class="rv">
+      <a href="https://discord.gg/fJhh8XcHav" target="_blank" class="btn-p" style="font-size:12px;padding:14px 40px;">💎 Open A Ticket Now</a>
     </div>
   </div>
 </section>
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="section-header reveal">
-    <div class="section-tag">Get In Touch</div>
-    <h2 class="section-title">JOIN THE <span>COMMUNITY</span></h2>
-    <div class="section-line"></div>
+  <div class="sec-head rv">
+    <div class="sec-eye">Get In Touch</div>
+    <h2 class="sec-title">JOIN THE <em>COMMUNITY</em></h2>
+    <div class="sec-rule"></div>
   </div>
-  <div class="contact-wrap">
-    <div class="contact-links reveal">
-      <a href="https://discord.gg/fJhh8XcHav" target="_blank" class="contact-btn btn-discord">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057.1 18.12.134 18.18.187 18.217a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+  <div class="ct-wrap">
+    <div class="ct-socials rv">
+      <a href="https://discord.gg/fJhh8XcHav" target="_blank" class="ct-btn c-dc">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057.1 18.12.134 18.18.187 18.217a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
         DISCORD
       </a>
-      <a href="https://www.instagram.com/zoroxcheats?igsh=Z3A2cXRtcml6cm0w" target="_blank" class="contact-btn btn-insta">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      <a href="https://www.instagram.com/zoroxcheats?igsh=Z3A2cXRtcml6cm0w" target="_blank" class="ct-btn c-ig">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         INSTAGRAM
       </a>
-      <a href="https://www.youtube.com/channel/UC2CqhuEmxNVD9yzY7TLZDbQ" target="_blank" class="contact-btn btn-yt">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+      <a href="https://www.youtube.com/channel/UC2CqhuEmxNVD9yzY7TLZDbQ" target="_blank" class="ct-btn c-yt">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
         YOUTUBE
       </a>
     </div>
-    <div class="contact-grid reveal">
-      <div class="contact-info-card"><div class="ci-label">Phone</div><div class="ci-value">+91 9949100650</div></div>
-      <div class="contact-info-card"><div class="ci-label">Email</div><div class="ci-value">zoroxcheats@gmail.com</div></div>
-      <div class="contact-info-card"><div class="ci-label">Discord</div><div class="ci-value">discord.gg/fJhh8XcHav</div></div>
-      <div class="contact-info-card"><div class="ci-label">Support</div><div class="ci-value">Open A Ticket</div></div>
+    <div class="ct-info rv">
+      <div class="ct-card"><div class="ct-lbl">Phone</div><div class="ct-val">+91 9949100650</div></div>
+      <div class="ct-card"><div class="ct-lbl">Email</div><div class="ct-val">zoroxcheats@gmail.com</div></div>
+      <div class="ct-card"><div class="ct-lbl">Discord</div><div class="ct-val">discord.gg/fJhh8XcHav</div></div>
+      <div class="ct-card"><div class="ct-lbl">Support</div><div class="ct-val">Open A Ticket</div></div>
     </div>
-    <div class="reveal">
-      <a href="https://discord.gg/fJhh8XcHav" target="_blank" class="btn-primary" style="font-size:13px;padding:16px 46px;margin:0 auto;display:inline-flex;">
+    <div class="rv">
+      <a href="https://discord.gg/fJhh8XcHav" target="_blank" class="btn-p" style="font-size:12px;padding:15px 44px;margin:0 auto;display:inline-flex;">
         💎 BUY PANELS — JOIN DISCORD
       </a>
     </div>
   </div>
 </section>
 
+</div><!-- /content -->
+
 <!-- FOOTER -->
 <footer>
-  <div class="footer-top">
-    <div class="footer-brand">
+  <div class="ft-top">
+    <div class="ft-brand">
       <img src="logo.gif" alt="Logo">
       <div>
-        <div class="footer-brand-text">ZORO X CHEATS</div>
-        <div style="font-size:9px;color:#2a2a2a;letter-spacing:3px;font-family:'Orbitron',sans-serif;margin-top:2px;">PANEL GAMING SYSTEM</div>
+        <div class="ft-name">ZORO X CHEATS</div>
+        <div class="ft-tagline">PANEL GAMING SYSTEM</div>
       </div>
     </div>
-    <div class="footer-links">
+    <div class="ft-links">
       <a href="#why">Features</a>
       <a href="#services">Services</a>
       <a href="#team">Team</a>
-      <a href="#howtobuy">How To Buy</a>
+      <a href="#buy">How To Buy</a>
       <a href="#contact">Contact</a>
       <a href="https://discord.gg/fJhh8XcHav" target="_blank">Discord</a>
     </div>
   </div>
-  <div class="footer-bottom">
-    <div class="footer-copy">© 2025 <span>ZORO X CHEATS</span> — All Rights Reserved</div>
-    <div class="footer-rights">PANEL GAMING SYSTEM · ZOROXCHEATS@GMAIL.COM</div>
+  <div class="ft-bot">
+    <div class="ft-copy">© 2025 <em>ZORO X CHEATS</em> — All Rights Reserved</div>
+    <div class="ft-r">ZOROXCHEATS@GMAIL.COM · +91 9949100650</div>
   </div>
 </footer>
 
 <script>
-// ── LOADER ──
-let pct = 0;
-const pctEl = document.getElementById('lpct');
-const iv = setInterval(() => {
-  pct += Math.floor(Math.random()*8+3);
-  if (pct >= 100) { pct = 100; clearInterval(iv); }
-  pctEl.textContent = 'LOADING... ' + pct + '%';
-}, 100);
-window.addEventListener('load', () => {
-  setTimeout(() => {
+/* ── LOADER ── */
+let p=0;
+const pel=document.getElementById('lpct');
+const iv=setInterval(()=>{
+  p+=Math.floor(Math.random()*9+3);
+  if(p>=100){p=100;clearInterval(iv);}
+  pel.textContent='LOADING... '+p+'%';
+},90);
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
     document.getElementById('loader').classList.add('hide');
-    setTimeout(() => document.getElementById('loader').remove(), 800);
-  }, 2600);
+    setTimeout(()=>document.getElementById('loader').remove(),900);
+  },2600);
 });
 
-// ── MATRIX RAIN + CYBER BG ──
-const canvas = document.getElementById('bgcanvas');
-const ctx = canvas.getContext('2d');
-let W, H, cols = [], hexItems = [];
-const FONT_SIZE = 14;
-const matrixChars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*<>[]{}';
+/* ── MATRIX RAIN (subtle — canvas opacity 0.22) ── */
+const cv=document.getElementById('bgcanvas');
+const cx=cv.getContext('2d');
+let W,H,cols=[];
+const FS=14;
+const MC='アカサタナハマヤラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%*<>[]';
 
-function resize() {
-  W = canvas.width  = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-  initAll();
+function resize(){
+  W=cv.width=window.innerWidth;
+  H=cv.height=window.innerHeight;
+  cols=[];
+  const n=Math.floor(W/FS);
+  for(let i=0;i<n;i++) cols.push({y:Math.random()*-H,sp:Math.random()*2+0.6,len:Math.floor(Math.random()*20+8)});
 }
 
-function initAll() {
-  cols = [];
-  const count = Math.floor(W / FONT_SIZE);
-  for (let i = 0; i < count; i++) {
-    cols.push({
-      y: Math.random() * -H,
-      speed: Math.random() * 2.5 + 0.8,
-      length: Math.floor(Math.random() * 22 + 8)
-    });
-  }
-  hexItems = [];
-  for (let i = 0; i < 16; i++) {
-    hexItems.push({
-      x: Math.random()*W, y: Math.random()*H,
-      text: '0x'+Math.floor(Math.random()*0xFFFFFF).toString(16).toUpperCase().padStart(6,'0'),
-      alpha: Math.random()*0.15+0.04,
-      speed: Math.random()*0.35+0.1,
-      size: Math.floor(Math.random()*3+9)
-    });
-  }
-}
-
-let gridOffset=0, scanY=0;
-
-function drawGrid(){
-  const sp=60;
-  ctx.strokeStyle='rgba(0,255,156,0.03)'; ctx.lineWidth=0.5;
-  for(let x=0;x<W;x+=sp){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-  gridOffset=(gridOffset+0.22)%sp;
-  for(let y=-sp+gridOffset;y<H;y+=sp){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-}
-
-function drawMatrix(){
-  ctx.font=FONT_SIZE+'px monospace';
-  cols.forEach((col,i)=>{
-    col.y+=col.speed;
-    if(col.y>H+col.length*FONT_SIZE){col.y=Math.random()*-200;col.speed=Math.random()*2.5+0.8;}
-    for(let j=0;j<col.length;j++){
-      const cy=col.y-j*FONT_SIZE;
+let gy=0;
+function draw(){
+  cx.fillStyle='rgba(3,5,10,0.12)';
+  cx.fillRect(0,0,W,H);
+  cx.font=FS+'px monospace';
+  cols.forEach((c,i)=>{
+    c.y+=c.sp;
+    if(c.y>H+c.len*FS){c.y=Math.random()*-200;c.sp=Math.random()*2+0.6;}
+    for(let j=0;j<c.len;j++){
+      const cy=c.y-j*FS;
       if(cy<0||cy>H) continue;
-      const ch=matrixChars[Math.floor(Math.random()*matrixChars.length)];
-      if(j===0)         ctx.fillStyle='rgba(255,255,255,0.95)';
-      else if(j<3)      ctx.fillStyle=`rgba(180,255,220,${0.9-j*0.15})`;
-      else              ctx.fillStyle=`rgba(0,255,156,${(1-j/col.length)*0.6})`;
-      ctx.fillText(ch,i*FONT_SIZE,cy);
+      const ch=MC[Math.floor(Math.random()*MC.length)];
+      if(j===0)       cx.fillStyle='rgba(255,255,255,0.9)';
+      else if(j<3)    cx.fillStyle=`rgba(160,255,210,${0.85-j*0.14})`;
+      else            cx.fillStyle=`rgba(0,255,156,${(1-j/c.len)*0.55})`;
+      cx.fillText(ch,i*FS,cy);
     }
   });
+  requestAnimationFrame(draw);
 }
-
-function drawHex(){
-  hexItems.forEach(h=>{
-    h.y-=h.speed;
-    if(h.y<-20){h.y=H+20;h.x=Math.random()*W;h.text='0x'+Math.floor(Math.random()*0xFFFFFF).toString(16).toUpperCase().padStart(6,'0');}
-    ctx.font=h.size+'px monospace';
-    ctx.fillStyle=`rgba(0,255,156,${h.alpha})`;
-    ctx.fillText(h.text,h.x,h.y);
-  });
-}
-
-function drawScan(){
-  scanY=(scanY+1.2)%H;
-  const g=ctx.createLinearGradient(0,scanY-50,0,scanY+50);
-  g.addColorStop(0,'rgba(0,255,156,0)');
-  g.addColorStop(0.5,'rgba(0,255,156,0.03)');
-  g.addColorStop(1,'rgba(0,255,156,0)');
-  ctx.fillStyle=g; ctx.fillRect(0,scanY-50,W,100);
-}
-
-function drawBrackets(){
-  const s=34,p=16;
-  ctx.strokeStyle='rgba(0,255,156,0.22)'; ctx.lineWidth=1.5;
-  ctx.beginPath();ctx.moveTo(p,p+s);ctx.lineTo(p,p);ctx.lineTo(p+s,p);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(W-p-s,p);ctx.lineTo(W-p,p);ctx.lineTo(W-p,p+s);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(p,H-p-s);ctx.lineTo(p,H-p);ctx.lineTo(p+s,H-p);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(W-p-s,H-p);ctx.lineTo(W-p,H-p);ctx.lineTo(W-p,H-p-s);ctx.stroke();
-}
-
-function animate(){
-  ctx.fillStyle='rgba(5,5,5,0.09)'; ctx.fillRect(0,0,W,H);
-  drawGrid(); drawMatrix(); drawHex(); drawScan(); drawBrackets();
-  requestAnimationFrame(animate);
-}
-
 resize();
-window.addEventListener('resize', resize);
-animate();
+window.addEventListener('resize',resize);
+draw();
 
-// ── SCROLL REVEAL ──
-const observer = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+/* ── SCROLL REVEAL ── */
+const ro=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});
 },{threshold:0.08});
-document.querySelectorAll('.reveal').forEach(r=>observer.observe(r));
+document.querySelectorAll('.rv').forEach(r=>ro.observe(r));
 
-// ── COUNTER ANIMATION ──
-const cObs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(!e.isIntersecting) return;
-    const el=e.target, target=+el.dataset.target; let cur=0;
-    const step=target/55;
-    const t=setInterval(()=>{
-      cur+=step;
-      if(cur>=target){cur=target;clearInterval(t);}
-      el.textContent=Math.floor(cur);
-    },22);
-    cObs.unobserve(el);
+/* ── COUNTER ── */
+const co=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const el=e.target,t=+el.dataset.t;
+    let c=0,step=t/55;
+    const ti=setInterval(()=>{c+=step;if(c>=t){c=t;clearInterval(ti);}el.textContent=Math.floor(c);},22);
+    co.unobserve(el);
   });
 },{threshold:0.5});
-document.querySelectorAll('.stat-num[data-target]').forEach(c=>cObs.observe(c));
+document.querySelectorAll('.stat-num[data-t]').forEach(c=>co.observe(c));
 
-// ── NAVBAR ACTIVE ──
+/* ── NAVBAR ACTIVE ── */
 window.addEventListener('scroll',()=>{
   let cur='';
   document.querySelectorAll('section[id]').forEach(s=>{
-    if(window.scrollY>=s.offsetTop-120) cur=s.id;
+    if(window.scrollY>=s.offsetTop-120)cur=s.id;
   });
   document.querySelectorAll('nav ul li a').forEach(a=>{
-    a.style.color=a.getAttribute('href')==='#'+cur?'var(--green)':'';
+    a.style.color=a.getAttribute('href')==='#'+cur?'var(--g)':'';
   });
 });
 
-// ── GLITCH CARD FLASH ──
+/* ── RANDOM GLITCH FLASH ON CARDS ── */
 setInterval(()=>{
-  const cards=document.querySelectorAll('.service-card');
-  const r=cards[Math.floor(Math.random()*cards.length)];
-  if(r){
-    r.style.borderColor='var(--orange)';
-    r.style.boxShadow='0 0 16px rgba(255,106,0,.16)';
-    setTimeout(()=>{r.style.borderColor='';r.style.boxShadow='';},160);
-  }
-},2600);
+  const cs=document.querySelectorAll('.svc-card');
+  const r=cs[Math.floor(Math.random()*cs.length)];
+  if(!r)return;
+  r.style.borderColor='rgba(255,106,0,.4)';
+  r.style.boxShadow='0 0 14px rgba(255,106,0,.14)';
+  setTimeout(()=>{r.style.borderColor='';r.style.boxShadow='';},150);
+},2800);
 </script>
 </body>
 </html>
